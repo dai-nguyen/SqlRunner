@@ -16,9 +16,8 @@ namespace SqlRunner.DataAccess
         {
             Database.SetInitializer<DataContext>(null);
         }
-
-        public DbSet<AppSetup> AppSetups { get; set; }
-        public DbSet<FileLog> FileLogs { get; set; }
+        
+        public DbSet<QueryFile> FileLogs { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

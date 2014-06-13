@@ -8,11 +8,19 @@ using System;
 
 namespace SqlRunner.Models
 {
-    public class FileLog
+    public class QueryFile
     {
         public Int64 Id { get; set; }
-        public string FileName { get; set; }
+        public string Name { get; set; }
+        public string Content { get; set; }
         public string Params { get; set; }
         public DateTime DateCreated { get; set; }
+        public DateTime DateModified { get; set; }
+
+        public QueryFile()
+        {
+            DateCreated = DateTime.Now;
+            DateModified = DateCreated;
+        }
     }
 }

@@ -98,86 +98,29 @@ namespace SqlRunner.ViewModels
             }
         }
 
-        public async Task<bool> LoadAsync()
+        public void Load()
         {
-            using (AppSetupService service = new AppSetupService())
-            {
-                var srv = await service.All()
-                    .FirstOrDefaultAsync(t => t.Name == "Server");
-
-                Server = srv != null ? srv.Value : "";
-
-                var db = await service.All()
-                    .FirstOrDefaultAsync(t => t.Name == "Database");
-
-                Database = db != null ? db.Value : "";
-
-                var usr = await service.All()
-                    .FirstOrDefaultAsync(t => t.Name == "User");
-
-                User = usr != null ? usr.Value : "";
-
-                var pass = await service.All()
-                    .FirstOrDefaultAsync(t => t.Name == "Password");
-
-                Password = pass != null ? pass.Value : "";
-
-                return true;
-            }
+            Server = Properties.DbSettings.Default.Server;
+            Database = Properties.DbSettings.Default.Database;
+            User = Properties.DbSettings.Default.User;
+            Password = Properties.DbSettings.Default.Password;
         }
 
-        public async Task<bool> SaveAsync(CancellationToken token)
+        public void Save()
         {
-            List<bool> results = new List<bool>();
+            Properties.DbSettings.Default.Server = Server;
+            Properties.DbSettings.Default.Database = Database;
+            Properties.DbSettings.Default.User = User;
+            Properties.DbSettings.Default.Password = Password;
+            Properties.DbSettings.Default.Save();
+        }
 
-            using (AppSetupService service = new AppSetupService())
-            {
-                var srv = await service.All()
-                    .FirstOrDefaultAsync(t => t.Name == "Server");
-
-                if (srv != null)
-                {
-                    srv.Value = server;
-                    results.Add(await service.UpdateAsync(srv, token) != null ? true : false);
-                }
-                else
-                    results.Add(await service.CreateAsync(new AppSetup { Name = "Server", Value = server }, token) != null ? true : false);
-
-                var db = await service.All()
-                    .FirstOrDefaultAsync(t => t.Name == "Database");
-
-                if (db != null)
-                {
-                    db.Value = database;
-                    results.Add(await service.UpdateAsync(db, token) != null ? true : false);
-                }
-                else
-                    results.Add(await service.CreateAsync(new AppSetup { Name = "Database", Value = database }, token) != null ? true : false);
-                
-                var usr = await service.All()
-                    .FirstOrDefaultAsync(t => t.Name == "User");
-
-                if (usr != null)
-                {
-                    usr.Value = user;
-                    results.Add(await service.UpdateAsync(usr, token) != null ? true : false);
-                }
-                else
-                    results.Add(await service.CreateAsync(new AppSetup { Name = "User", Value = user }, token) != null ? true : false);
-
-                var pass = await service.All()
-                    .FirstOrDefaultAsync(t => t.Name == "Password");
-
-                if (pass != null)
-                {
-                    pass.Value = password;
-                    results.Add(await service.UpdateAsync(pass, token) != null ? true : false);
-                }
-                else
-                    results.Add(await service.CreateAsync(new AppSetup { Name = "Password", Value = password }, token) != null ? true : false);
-
-                return results.Count(t => t == true) == 4;
-            }
+        public bool IsValid()
+        {
+            return !string.IsNullOrEmpty(Server)
+                && !string.IsNullOrEmpty(Database)
+                && !string.IsNullOrEmpty(User)
+                && !string.IsNullOrEmpty(Password);
         }        
     }
 }

@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:mui="http://firstfloorsoftware.com/ModernUI"
+             xmlns:app="clr-namespace:SqlRunner.ViewModels"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
@@ -11,6 +12,11 @@
             <StackPanel MinWidth="200">
                 <TextBlock Text="SETUP" Style="{StaticResource Heading2}" />
                 <StackPanel Orientation="Vertical" Margin="0,10,0,0">
+                    
+                    <!--<StackPanel.DataContext>
+                        <app:DatabaseView />
+                    </StackPanel.DataContext>-->
+                    
                     <StackPanel.Resources>
                         <Style TargetType="StackPanel">
                             <Setter Property="Orientation" Value="Horizontal" />
@@ -27,20 +33,21 @@
                             <Setter Property="Padding" Value="0,3" />
                         </Style>
                     </StackPanel.Resources>
+                    
                     <StackPanel>
-                        <Label Content="Server" />
-                        <TextBox Name="txtServer" Width="150" />
+                        <Label Content="Server" Target="{Binding ElementName=txtServer}" />
+                        <TextBox Name="txtServer" Width="150" Text="{Binding Server, Mode=TwoWay, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}" />
                     </StackPanel>
                     <StackPanel>
-                        <Label Content="Database" />
-                        <TextBox Name="txtDatabase" Width="150" />
+                        <Label Content="Database" Target="{Binding ElementName=txtDatabase}" />
+                        <TextBox Name="txtDatabase" Width="150" Text="{Binding Database, Mode=TwoWay, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}" />
                     </StackPanel>
                     <StackPanel>
-                        <Label Content="User" />
-                        <TextBox Name="txtUser" Width="150" />
+                        <Label Content="User" Target="{Binding ElementName=txtUser}" />
+                        <TextBox Name="txtUser" Width="150" Text="{Binding User, Mode=TwoWay, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}" />
                     </StackPanel>                    
                     <StackPanel>
-                        <Label Content="Password" />
+                        <Label Content="Password" Target="{Binding ElementName=txtPassword}" />
                         <PasswordBox Name="txtPassword" Width="150" />
                     </StackPanel>
                     <Button Name="btnSave" Click="btnSave_Click" Content="Save" Margin="100,16,0,0" HorizontalAlignment="Left" />

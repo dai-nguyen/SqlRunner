@@ -20,11 +20,11 @@ namespace SqlRunner.Content
 Written by Dai Nguyen
 
 Credits:
-- ModernUI
 - SQLITE
 - Entity Framework
 - ClosedXML
-- OpenXML
+- ModernUI
+- Modern UI Icons
 ";
         }
     }
