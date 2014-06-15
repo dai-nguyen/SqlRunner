@@ -5,7 +5,6 @@
 **/
 
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace SqlRunner.DataAccess
@@ -24,46 +23,46 @@ namespace SqlRunner.DataAccess
             Context = context;
         }
 
-        public async virtual Task<T> CreateAsync(T entity, CancellationToken token)
+        public async virtual Task<T> CreateAsync(T entity)
         {
             try
             {
                 Context.Set<T>().Add(entity);
 
-                if (await Context.SaveChangesAsync(token) > 0)
+                if (await Context.SaveChangesAsync() > 0)
                     return entity;
             }
             catch { }
             return null;
         }
 
-        public async virtual Task<T> UpdateAsync(T entity, CancellationToken token)
+        public async virtual Task<T> UpdateAsync(T entity)
         {
             try
             {
                 Context.Entry(entity).State = System.Data.Entity.EntityState.Modified;
 
-                if (await Context.SaveChangesAsync(token) > 0)
+                if (await Context.SaveChangesAsync() > 0)
                     return entity;
             }
             catch { }
             return null;
         }
 
-        public async virtual Task<bool> DeleteAsync(T entity, CancellationToken token)
+        public async virtual Task<bool> DeleteAsync(T entity)
         {
             try
             {
                 Context.Set<T>().Remove(entity);
-                return await Context.SaveChangesAsync(token) > 0;
+                return await Context.SaveChangesAsync() > 0;
             }
             catch { }
             return false;
-        }
+        }        
 
-        public async virtual Task<T> GetAsync(int id, CancellationToken token)
+        public async virtual Task<T> GetAsync(long id)
         {
-            return await Context.Set<T>().FindAsync(id, token);
+            return await Context.Set<T>().FindAsync(id);
         }
 
         public IQueryable<T> All()

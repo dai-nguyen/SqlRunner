@@ -4,18 +4,11 @@
  * Author: Dai Nguyen
 **/
 
-using SqlRunner.DataAccess;
-using System.ComponentModel;
-using System.Threading.Tasks;
-using System.Linq;
-using System.Data.Entity;
-using System.Threading;
-using SqlRunner.Models;
-using System.Collections.Generic;
+using GalaSoft.MvvmLight;
 
 namespace SqlRunner.ViewModels
 {
-    public class DatabaseView : NotifyPropertyChanged, IDataErrorInfo
+    public class DatabaseView : ViewModelBase
     {
         private string server;
         public string Server 
@@ -26,7 +19,7 @@ namespace SqlRunner.ViewModels
                 if (server != value)
                 {
                     server = value;
-                    OnPropertyChanged("Server");
+                    RaisePropertyChanged("Server");
                 }
             }
         }
@@ -40,7 +33,7 @@ namespace SqlRunner.ViewModels
                 if (database != value)
                 {
                     database = value;
-                    OnPropertyChanged("Database");
+                    RaisePropertyChanged("Database");
                 }
             }
         }
@@ -54,7 +47,7 @@ namespace SqlRunner.ViewModels
                 if (user != value)
                 {
                     user = value;
-                    OnPropertyChanged("User");
+                    RaisePropertyChanged("User");
                 }
             }
         }
@@ -68,7 +61,7 @@ namespace SqlRunner.ViewModels
                 if (password != value)
                 {
                     password = value;
-                    OnPropertyChanged("Password");
+                    RaisePropertyChanged("Password");
                 }
             }
         }

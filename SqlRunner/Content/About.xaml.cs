@@ -21,10 +21,11 @@ Written by Dai Nguyen
 
 Credits:
 - SQLITE
-- Entity Framework
 - ClosedXML
-- ModernUI
+- Entity Framework
+- Json.NET
 - Modern UI Icons
+- ModernUI
 ";
         }
     }

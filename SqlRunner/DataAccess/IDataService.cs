@@ -5,17 +5,16 @@
 **/
 
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace SqlRunner.DataAccess
 {
     public interface IDataService<T> where T : class
     {
-        Task<T> CreateAsync(T entity, CancellationToken token);
-        Task<T> UpdateAsync(T entity, CancellationToken token);
-        Task<bool> DeleteAsync(T entity, CancellationToken token);
-        Task<T> GetAsync(int id, CancellationToken token);
+        Task<T> CreateAsync(T entity);
+        Task<T> UpdateAsync(T entity);
+        Task<bool> DeleteAsync(T entity);
+        Task<T> GetAsync(long id);
         IQueryable<T> All();
     }
 }
