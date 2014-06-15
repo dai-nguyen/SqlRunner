@@ -1,4 +1,10 @@
-﻿using SqlRunner.DataAccess;
+﻿/** 
+ * This file is part of the SqlRunner project.
+ * Copyright (c) 2014 Dai Nguyen
+ * Author: Dai Nguyen
+**/
+
+using SqlRunner.DataAccess;
 using SqlRunner.Models;
 using System.Collections.ObjectModel;
 using System.Threading;
