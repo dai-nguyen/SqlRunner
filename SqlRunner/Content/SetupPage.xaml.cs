@@ -5,7 +5,7 @@
 **/
 
 using FirstFloor.ModernUI.Windows;
-using SqlRunner.ViewModels;
+using SqlRunner.ViewModel;
 using System.Windows;
 using System.Windows.Controls;
 

@@ -58,7 +58,12 @@ namespace SqlRunner.DataAccess
             }
             catch { }
             return false;
-        }        
+        }
+
+        public async virtual Task<bool> DeleteAsync(long id)
+        {
+            return await this.DeleteAsync(await GetAsync(id));
+        }
 
         public async virtual Task<T> GetAsync(long id)
         {

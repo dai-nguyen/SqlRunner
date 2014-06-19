@@ -6,7 +6,7 @@
 
 using GalaSoft.MvvmLight;
 
-namespace SqlRunner.ViewModels
+namespace SqlRunner.ViewModel
 {
     public class DatabaseView : ViewModelBase
     {

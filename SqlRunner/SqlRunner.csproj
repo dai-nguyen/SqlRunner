@@ -113,9 +113,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="ViewModels\DatabaseViewModels.cs" />
-    <Compile Include="ViewModels\NotifyPropertyChanged.cs" />
-    <Compile Include="ViewModels\SqlFileViewModels.cs" />
+    <Compile Include="ViewModel\DatabaseViewModels.cs" />
+    <Compile Include="ViewModel\SqlFileViewModels.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
     <Page Include="Content\SetupPage.xaml">

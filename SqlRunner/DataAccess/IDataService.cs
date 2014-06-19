@@ -14,6 +14,7 @@ namespace SqlRunner.DataAccess
         Task<T> CreateAsync(T entity);
         Task<T> UpdateAsync(T entity);
         Task<bool> DeleteAsync(T entity);
+        Task<bool> DeleteAsync(long id);
         Task<T> GetAsync(long id);
         IQueryable<T> All();
     }

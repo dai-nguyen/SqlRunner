@@ -14,9 +14,10 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data.Entity;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace SqlRunner.ViewModels
+namespace SqlRunner.ViewModel
 {
     public class SqlFileViewModel : ViewModelBase, IDataErrorInfo
     {
@@ -32,7 +33,7 @@ namespace SqlRunner.ViewModels
                 {
                     id = value;
                     RaisePropertyChanged("Id");
-                    
+                    RaisePropertyChanged("IsNameEnabled");
                 }
             }
         }
@@ -49,6 +50,15 @@ namespace SqlRunner.ViewModels
                     RaisePropertyChanged("Name");
                 }
             }
+        }
+
+        public bool IsNameEnabled 
+        { 
+            get 
+            { 
+                return Id != 0 ? false : true; 
+            }
+            
         }
 
         private string content;
@@ -141,6 +151,22 @@ namespace SqlRunner.ViewModels
             this.Params = JsonConvert.DeserializeObject<ObservableCollection<SqlParamView>>(entity.Params);
         }
 
+        public void LoadFromDropFile(string content)
+        {
+            this.id = 0;
+            this.name = "";
+            this.Content = content;
+            this.Params.Clear();
+
+            MatchCollection matches = Regex.Matches(content, @"(?<!\w)@\w+");
+
+            foreach (Match match in matches)
+            {
+                if (!Params.Any(t => t.Key == match.Value))
+                    this.Params.Add(new SqlParamView(match.Value, ""));
+            }
+        }
+
         public async void LoadFromSearchResult(SearchQueryFile result)
         {
             using (QueryFileService service = new QueryFileService())
@@ -219,7 +245,14 @@ namespace SqlRunner.ViewModels
             {
                 using (QueryFileService service = new QueryFileService())
                 {
-                    return await service.DeleteAsync(this.ToEntity());
+                    if (await service.DeleteAsync(Id))
+                    {
+                        Id = 0;
+                        Name = "";
+                        Content = "";
+                        Params.Clear();
+                        return true;
+                    }
                 }
             }
             return false;
@@ -273,6 +306,18 @@ namespace SqlRunner.ViewModels
 
                 return null;
             }
+        }
+    
+        public SqlParamView()
+        {
+            Key = "";
+            Value = "";
+        }
+
+        public SqlParamView(string key, string value)
+        {
+            Key = key;
+            Value = value;
         }
     }
 }

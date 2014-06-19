@@ -7,7 +7,7 @@
 using FirstFloor.ModernUI.Windows;
 using FirstFloor.ModernUI.Windows.Controls;
 using SqlRunner.Models;
-using SqlRunner.ViewModels;
+using SqlRunner.ViewModel;
 using System.Data;
 using System.Data.SqlClient;
 using System.Threading;
@@ -15,6 +15,12 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Linq;
+using System.IO;
+using System.Text;
+using System;
+using Microsoft.Win32;
+using ClosedXML.Excel;
 
 namespace SqlRunner.Pages
 {
@@ -47,12 +53,16 @@ namespace SqlRunner.Pages
 
             // Load Result
             if (result != null)
+            {
+                ClearDataTable();
                 _file.LoadFromSearchResult(result);
+            }
         }
 
-        private void btnNew_Click(object sender, RoutedEventArgs e)
+        private void ClearDataTable()
         {
-
+            _dataTable.Clear();
+            _dataTable.Columns.Clear();
         }
 
         private async void btnSave_Click(object sender, RoutedEventArgs e)
@@ -61,12 +71,19 @@ namespace SqlRunner.Pages
             if (await _file.CanSaveAsync() && await _file.SaveSync())
                 SetBusyIndicator(false, "Saved");
             else
-                SetBusyIndicator(false, "Failed");
+                SetBusyIndicator(false, "Failed");            
         }
 
-        private void btnDelete_Click(object sender, RoutedEventArgs e)
+        private async void btnDelete_Click(object sender, RoutedEventArgs e)
         {
+            SetBusyIndicator(true, "Please wait...");
             
+            if (await _file.DeleteAsync())            
+                SetBusyIndicator(false, "Deleted");
+            else
+                SetBusyIndicator(false, "Failed");
+
+            ClearDataTable();
         }
 
         private void btnEdit_Click(object sender, RoutedEventArgs e)
@@ -83,33 +100,43 @@ namespace SqlRunner.Pages
             }
         }
 
-        private void btnStop_Click(object sender, RoutedEventArgs e)
-        {
-            _source.Cancel();
-        }
-
         private async void btnRun_Click(object sender, RoutedEventArgs e)
-        {
+        {            
             SetBusyIndicator(true, "Please wait...");
 
-            _source.Cancel();
-            _source.Dispose();
-            _source = new CancellationTokenSource();
-            _dataTable.Clear();
-
-            if (!string.IsNullOrEmpty(_file.Content) 
-                && !string.IsNullOrWhiteSpace(_file.Content))
+            if (btnRun.Tag.ToString() == "Run")
             {
-                var dt = await GetDataTableAsync();
+                btnRun.Tag = "Stop";
+                btnRun.IconData = Geometry.Parse(Properties.Resources.IconStop);
 
-                if (dt != null)
+                _source.Cancel();
+                _source.Dispose();
+                _source = new CancellationTokenSource();
+                _dataTable.Clear();
+
+                if (!string.IsNullOrEmpty(_file.Content)
+                    && !string.IsNullOrWhiteSpace(_file.Content))
                 {
-                    _dataTable = dt;
-                    gridResult.DataContext = _dataTable.DefaultView;
+                    var dt = await GetDataTableAsync();
+
+                    if (dt != null)
+                    {
+                        _dataTable = dt;
+                        gridResult.DataContext = _dataTable.DefaultView;
+                    }
                 }
+
+                btnRun.IconData = Geometry.Parse(Properties.Resources.IconRun);
+                btnRun.Tag = "Run";
+            }
+            else
+            {
+                _source.Cancel();
+                btnRun.IconData = Geometry.Parse(Properties.Resources.IconRun);
+                btnRun.Tag = "Run";
             }
 
-            SetBusyIndicator(false, "Done");
+            SetBusyIndicator(false, "Done");           
         }
 
         private async Task<DataTable> GetDataTableAsync()
@@ -135,7 +162,8 @@ namespace SqlRunner.Pages
                         {
                             foreach (var param in _file.Params)
                             {
-                                cmd.Parameters.AddWithValue(param.Key, param.Value);
+                                if (!string.IsNullOrEmpty(param.Key) && !string.IsNullOrEmpty(param.Value))
+                                    cmd.Parameters.AddWithValue(param.Key, param.Value);
                             }
                         }
 
@@ -156,9 +184,54 @@ namespace SqlRunner.Pages
             return null;
         }
 
-        private void btnExport_Click(object sender, RoutedEventArgs e)
+        private async void btnExport_Click(object sender, RoutedEventArgs e)
         {
+            if (_dataTable == null)
+                return;
 
+            SetBusyIndicator(true, "Please wait...");
+
+            SaveFileDialog dialog = new SaveFileDialog();
+            dialog.FileName = !string.IsNullOrEmpty(_file.Name) ? _file.Name : "export";
+            dialog.DefaultExt = ".xlsx";
+            dialog.Filter = "Excel (.xlsx)|*.xlsx";
+
+            if (dialog.ShowDialog() == true)
+            {
+                await Task.Run(() =>
+                    {
+
+                        var workbook = new XLWorkbook();
+                        var worksheet = workbook.Worksheets.Add("Exported Data");
+
+                        worksheet.Cell("A1").Value = DateTime.Now;
+                        worksheet.Cell("A2").Value = _file.Name;
+
+                        // columns
+                        for (int col = 0; col < _dataTable.Columns.Count; col++)
+                        {
+                            var col_cell = worksheet.Cell(4, col + 1);
+                            col_cell.Value = _dataTable.Columns[col].ColumnName;
+                            col_cell.Style.Font.Bold = true;
+                            col_cell.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+
+                        }
+
+                        // rows
+                        for (int row = 0; row < _dataTable.Rows.Count; row++)
+                        {
+                            for (int col = 0; col < _dataTable.Columns.Count; col++)
+                            {
+                                worksheet.Cell(row + 5, col + 1).Value = _dataTable.Rows[row][col];
+                            }
+                        }
+
+                        worksheet.Columns().AdjustToContents();
+                        workbook.SaveAs(dialog.FileName);                        
+                    });
+            }
+
+            SetBusyIndicator(false, "Done");
         }
 
         public void OnFragmentNavigation(FirstFloor.ModernUI.Windows.Navigation.FragmentNavigationEventArgs e)
@@ -194,6 +267,75 @@ namespace SqlRunner.Pages
         {
             txtStatus.Text = msg;
             busyIndicator.IsIndeterminate = busy ? true : false;
+
+            btnOpen.IsEnabled = !busy;            
+            btnDelete.IsEnabled = !busy;
+            btnEdit.IsEnabled = !busy;
+            btnSave.IsEnabled = !busy;
+            btnExport.IsEnabled = !busy;
+        }
+
+        private void txtSql_PreviewDragEnter(object sender, DragEventArgs e)
+        {
+            e.Effects = DragDropEffects.Copy;
+        }
+
+        private void txtSql_PreviewDragOver(object sender, DragEventArgs e)
+        {
+            e.Handled = true;
+        }
+
+        private void txtSql_PreviewDrop(object sender, DragEventArgs e)
+        {
+            _dataTable.Clear();
+            string file = "";
+
+            if (e.Data.GetDataPresent(DataFormats.FileDrop, false))
+            {
+                object text = e.Data.GetData(DataFormats.FileDrop);
+                string[] files = (string[])text;
+                string f = files.FirstOrDefault(t => Path.GetExtension(t).ToLower() == ".sql");
+
+                if (f != null)
+                    _file.LoadFromDropFile(File.ReadAllText(f));
+            }
+            else if (e.Data.GetDataPresent("FileGroupDescriptor")) // drop from outlook
+            {
+                // http://www.codeproject.com/Articles/7140/Drag-and-Drop-Attached-File-From-Outlook-and-ab
+
+                using (Stream theStream = (Stream)e.Data.GetData("FileGroupDescriptor"))
+                {
+                    byte[] fileGroupDescriptor = new byte[512];
+                    theStream.Read(fileGroupDescriptor, 0, 512);
+                    StringBuilder fileName = new StringBuilder();
+                    for (int i = 76; fileGroupDescriptor[i] != 0; i++)
+                    {
+                        fileName.Append(Convert.ToChar(fileGroupDescriptor[i]));
+                    }
+
+                    if (Path.GetExtension(fileName.ToString()).ToLower() != ".sql")
+                        return;
+                }
+
+                file = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString() + ".sql");
+
+                using (MemoryStream ms = (MemoryStream)e.Data.GetData("FileContents", true))
+                {
+                    byte[] fileBytes = new byte[ms.Length];
+                    ms.Position = 0;
+                    ms.Read(fileBytes, 0, (int)ms.Length);
+
+                    using (FileStream fs = new FileStream(file, FileMode.Create))
+                    {
+                        fs.Write(fileBytes, 0, (int)fileBytes.Length);
+                    }
+                }
+
+                if (!string.IsNullOrEmpty(file) && File.Exists(file))
+                {
+                    _file.LoadFromDropFile(File.ReadAllText(file));
+                }
+            }
         }
     }
 }

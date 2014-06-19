@@ -15,35 +15,35 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="2*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <StackPanel Grid.Column="0" Grid.RowSpan="5" Orientation="Vertical" Margin="0,0,15,0">
-            <mui:ModernButton Name="btnOpen" Click="btnOpen_Click" EllipseDiameter="32" IconWidth="20" IconHeight="20" IconData="F1 M 19,50L 28,34L 63,34L 54,50L 19,50 Z M 19,28.0001L 35,28C 36,25 37.4999,24.0001 37.4999,24.0001L 48.75,24C 49.3023,24 50,24.6977 50,25.25L 50,28L 53.9999,28.0001L 53.9999,32L 27,32L 19,46.4L 19,28.0001 Z "/>
-            <mui:ModernButton Name="btnNew" Click="btnNew_Click" Margin="0,10,0,0" EllipseDiameter="32" IconWidth="20" IconHeight="20" IconData="F1 M 43,30L 50.75,30L 43,22.25L 43,30 Z M 52,34L 39,34L 39,21L 24,21L 24,45L 20,45L 20,17L 43.25,17L 56,29.75L 56,59L 34,59L 34,55L 52,55L 52,34 Z M 28,38L 33,38L 33,46L 41,46L 41,51L 33,51L 33,59L 28,59L 28,51L 20,51L 20,46L 28,46L 28,38 Z M 20,59L 20,52L 24,52L 24,55L 27,55L 27,59L 20,59 Z "/>
+            <mui:ModernButton Name="btnOpen" Click="btnOpen_Click" EllipseDiameter="32" IconWidth="20" IconHeight="20" IconData="F1 M 19,50L 28,34L 63,34L 54,50L 19,50 Z M 19,28.0001L 35,28C 36,25 37.4999,24.0001 37.4999,24.0001L 48.75,24C 49.3023,24 50,24.6977 50,25.25L 50,28L 53.9999,28.0001L 53.9999,32L 27,32L 19,46.4L 19,28.0001 Z "/>            
             <mui:ModernButton Name="btnSave" Click="btnSave_Click" Margin="0,10,0,20" EllipseDiameter="32" IconWidth="20" IconHeight="20" IconData="F1 M 20,20L 50.25,20L 56,25.75L 56,56L 20,56L 20,20 Z M 52,27.25L 48.75,24L 48,24L 48,37L 28,37L 28,24L 24,24L 24,52L 52,52L 52,27.25 Z M 39,24L 39,34L 44,34L 44,24L 39,24 Z "/>
             <mui:ModernButton Name="btnDelete" Click="btnDelete_Click" EllipseDiameter="32" IconWidth="20" IconHeight="20" IconData="F1 M 25.3333,23.75L 50.6667,23.75C 51.5411,23.75 51.8541,27.3125 51.8541,27.3125L 24.1458,27.3125C 24.1458,27.3125 24.4589,23.75 25.3333,23.75 Z M 35.625,19.7917L 40.375,19.7917C 40.8122,19.7917 41.9583,20.9378 41.9583,21.375C 41.9583,21.8122 40.8122,22.9584 40.375,22.9584L 35.625,22.9584C 35.1878,22.9584 34.0416,21.8122 34.0416,21.375C 34.0416,20.9378 35.1878,19.7917 35.625,19.7917 Z M 27.7083,28.5L 48.2916,28.5C 49.1661,28.5 49.875,29.2089 49.875,30.0834L 48.2916,53.8334C 48.2916,54.7078 47.5828,55.4167 46.7083,55.4167L 29.2917,55.4167C 28.4172,55.4167 27.7083,54.7078 27.7083,53.8334L 26.125,30.0834C 26.125,29.2089 26.8339,28.5 27.7083,28.5 Z M 30.0833,31.6667L 30.4792,52.25L 33.25,52.25L 32.8542,31.6667L 30.0833,31.6667 Z M 36.4167,31.6667L 36.4167,52.25L 39.5833,52.25L 39.5833,31.6667L 36.4167,31.6667 Z M 43.1458,31.6667L 42.75,52.25L 45.5208,52.25L 45.9167,31.6667L 43.1458,31.6667 Z"/>            
         </StackPanel>
-        <StackPanel Grid.Column="1" Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center">
-            <mui:ModernButton Name="btnEdit" Click="btnEdit_Click" EllipseDiameter="32" IconWidth="20" IconHeight="20" IconData="F1 M 54.6818,20.1053L 55.8947,21.3182C 57.4019,22.8254 57.4019,25.2691 55.8947,26.7763L 53.7721,28.8989L 47.1011,22.2279L 49.2237,20.1053C 50.7309,18.5981 53.1746,18.5981 54.6818,20.1053 Z M 36.1848,46.4862L 29.5138,39.8152L 45.8881,23.4408L 52.5592,30.1119L 36.1848,46.4862 Z M 28.9073,42.241L 33.759,47.0927L 27.0251,48.9749L 28.9073,42.241 Z M 19,57L 19,25L 40.8063,25L 36.8063,29L 23,29L 23,53L 53,53L 53,32.6912L 57,28.6911L 57,57L 19,57 Z "/>
-            <mui:ModernButton Name="btnStop" Click="btnStop_Click" EllipseDiameter="32" IconWidth="20" IconHeight="20" IconData="F1 M 38,19C 48.4934,19 57,27.5066 57,38C 57,48.4934 48.4934,57 38,57C 27.5066,57 19,48.4934 19,38C 19,27.5066 27.5066,19 38,19 Z M 38,23.75C 35.2116,23.75 32.6102,24.5509 30.4134,25.9352L 50.0648,45.5866C 51.4491,43.3898 52.25,40.7884 52.25,38C 52.25,30.13 45.87,23.75 38,23.75 Z M 23.75,38C 23.75,45.8701 30.1299,52.25 38,52.25C 40.7884,52.25 43.3897,51.4491 45.5865,50.0649L 25.9351,30.4136C 24.5509,32.6103 23.75,35.2117 23.75,38 Z "/>
-            <mui:ModernButton Name="btnRun" Click="btnRun_Click" EllipseDiameter="32" IconWidth="20" IconHeight="20" IconData="F1 M 30.0833,22.1667L 50.6665,37.6043L 50.6665,38.7918L 30.0833,53.8333L 30.0833,22.1667 Z "/>
+        <StackPanel Grid.Column="1" Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,10">
+            <mui:ModernButton Name="btnEdit" Click="btnEdit_Click" EllipseDiameter="32" IconWidth="20" IconHeight="20" IconData="F1 M 54.6818,20.1053L 55.8947,21.3182C 57.4019,22.8254 57.4019,25.2691 55.8947,26.7763L 53.7721,28.8989L 47.1011,22.2279L 49.2237,20.1053C 50.7309,18.5981 53.1746,18.5981 54.6818,20.1053 Z M 36.1848,46.4862L 29.5138,39.8152L 45.8881,23.4408L 52.5592,30.1119L 36.1848,46.4862 Z M 28.9073,42.241L 33.759,47.0927L 27.0251,48.9749L 28.9073,42.241 Z M 19,57L 19,25L 40.8063,25L 36.8063,29L 23,29L 23,53L 53,53L 53,32.6912L 57,28.6911L 57,57L 19,57 Z "/>            
+            <mui:ModernButton Name="btnRun" Tag="Run" Click="btnRun_Click" EllipseDiameter="32" IconWidth="20" IconHeight="20" IconData="F1 M 30.0833,22.1667L 50.6665,37.6043L 50.6665,38.7918L 30.0833,53.8333L 30.0833,22.1667 Z "/>
         </StackPanel>
-        <DataGrid Grid.Column="1" Grid.Row="1" Name="gridParams" Height="100">
+        <TextBox Grid.Row="1" Grid.Column="1" Name="txtName" Text="{Binding Name, Mode=TwoWay, NotifyOnValidationError=True}" IsEnabled="{Binding IsNameEnabled}" ></TextBox>
+        <DataGrid Grid.Column="1" Grid.Row="2" Name="gridParams" Height="100" ItemsSource="{Binding Params}" AutoGenerateColumns="False">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Param" Binding="{Binding Params.Param}" />
-                <DataGridTextColumn Header="Value" Binding="{Binding Params.Value}" />
+                <DataGridTextColumn Header="Param" Binding="{Binding Key, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <DataGridTextColumn Header="Value" Binding="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             </DataGrid.Columns>
         </DataGrid>
-        <TextBox Grid.Column="1" Grid.Row="2" Name="txtSql" IsReadOnly="True" AcceptsTab="True" AcceptsReturn="True" Text="{Binding Content, Mode=TwoWay, NotifyOnValidationError=True}" />
-        <!--<GridSplitter Grid.Column="1" Grid.Row="3" ResizeDirection="Rows" Height="5" />-->
-        <!--<StackPanel Grid.Column="1" Grid.Row="4">-->
-            <mui:ModernButton Grid.Column="1" Grid.Row="3" Click="btnExport_Click" HorizontalAlignment="Right" Name="btnExport" EllipseDiameter="32" IconWidth="20" IconHeight="20" IconData="F1 M 42,24L 57,24L 57,52L 42,52L 42,50L 47,50L 47,46L 42,46L 42,45L 47,45L 47,41L 42,41L 42,40L 47,40L 47,36L 42,36L 42,35L 47,35L 47,31L 42,31L 42,30L 47,30L 47,26L 42,26L 42,24 Z M 54.9995,50.0005L 54.9997,46.0003L 47.9995,46.0003L 47.9995,50.0005L 54.9995,50.0005 Z M 54.9996,41.0004L 47.9995,41.0004L 47.9995,45.0003L 54.9997,45.0003L 54.9996,41.0004 Z M 54.9996,36.0004L 47.9995,36.0004L 47.9995,40.0004L 54.9996,40.0004L 54.9996,36.0004 Z M 54.9996,31.0004L 47.9995,31.0004L 47.9995,35.0004L 54.9996,35.0004L 54.9996,31.0004 Z M 54.9995,26.0005L 47.9995,26.0005L 47.9995,30.0004L 54.9996,30.0004L 54.9995,26.0005 Z M 18.9997,23.7503L 40.9994,19.7506L 40.9994,56.2506L 18.9997,52.2503L 18.9997,23.7503 Z M 34.6404,44.5147L 31.3367,37.4084L 34.5522,30.4699L 31.9399,30.5805L 30.2234,34.6963L 30.0162,35.3903L 29.8872,35.8892L 29.8596,35.8895C 29.4574,34.1248 28.7481,32.4436 28.1318,30.7417L 25.2803,30.8624L 28.2549,37.4637L 24.997,44.0621L 27.7904,44.1932L 29.5296,39.8757L 29.7578,38.9297L 29.7876,38.93C 30.2317,40.8236 31.1236,42.5844 31.861,44.3843L 34.6404,44.5147 Z "/>
-            <DataGrid Grid.Column="1" Grid.Row="4" Name="gridResult" ItemsSource="{Binding}" />
-        <!--</StackPanel>-->
-        <StackPanel Grid.Column="1" Grid.Row="5">
+        <TextBox Grid.Column="1" Grid.Row="3" Name="txtSql" IsReadOnly="True" AcceptsTab="True" AcceptsReturn="True" Text="{Binding Content, Mode=TwoWay, NotifyOnValidationError=True}" 
+                 PreviewDragEnter="txtSql_PreviewDragEnter"
+                 PreviewDragOver="txtSql_PreviewDragOver"
+                 PreviewDrop="txtSql_PreviewDrop"/>
+        <mui:ModernButton Grid.Column="1" Grid.Row="4" Click="btnExport_Click" HorizontalAlignment="Right" Name="btnExport" EllipseDiameter="32" IconWidth="20" IconHeight="20" IconData="F1 M 42,24L 57,24L 57,52L 42,52L 42,50L 47,50L 47,46L 42,46L 42,45L 47,45L 47,41L 42,41L 42,40L 47,40L 47,36L 42,36L 42,35L 47,35L 47,31L 42,31L 42,30L 47,30L 47,26L 42,26L 42,24 Z M 54.9995,50.0005L 54.9997,46.0003L 47.9995,46.0003L 47.9995,50.0005L 54.9995,50.0005 Z M 54.9996,41.0004L 47.9995,41.0004L 47.9995,45.0003L 54.9997,45.0003L 54.9996,41.0004 Z M 54.9996,36.0004L 47.9995,36.0004L 47.9995,40.0004L 54.9996,40.0004L 54.9996,36.0004 Z M 54.9996,31.0004L 47.9995,31.0004L 47.9995,35.0004L 54.9996,35.0004L 54.9996,31.0004 Z M 54.9995,26.0005L 47.9995,26.0005L 47.9995,30.0004L 54.9996,30.0004L 54.9995,26.0005 Z M 18.9997,23.7503L 40.9994,19.7506L 40.9994,56.2506L 18.9997,52.2503L 18.9997,23.7503 Z M 34.6404,44.5147L 31.3367,37.4084L 34.5522,30.4699L 31.9399,30.5805L 30.2234,34.6963L 30.0162,35.3903L 29.8872,35.8892L 29.8596,35.8895C 29.4574,34.1248 28.7481,32.4436 28.1318,30.7417L 25.2803,30.8624L 28.2549,37.4637L 24.997,44.0621L 27.7904,44.1932L 29.5296,39.8757L 29.7578,38.9297L 29.7876,38.93C 30.2317,40.8236 31.1236,42.5844 31.861,44.3843L 34.6404,44.5147 Z "/>
+        <DataGrid Grid.Column="1" Grid.Row="5" Name="gridResult" ItemsSource="{Binding}" />
+        <StackPanel Grid.Column="1" Grid.Row="6">
             <ProgressBar Name="busyIndicator" Minimum="0" Maximum="1" Height="16" IsIndeterminate="True" Background="Transparent" />
             <TextBlock Name="txtStatus" Text="Please Wait..." />
         </StackPanel>
