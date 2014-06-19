@@ -261,6 +261,8 @@ namespace SqlRunner.Pages
             _source.Dispose();
             _file = null;
             _dialog = null;
+            ClearDataTable();
+            _dataTable = null;
         }
 
         private void SetBusyIndicator(bool busy, string msg)
