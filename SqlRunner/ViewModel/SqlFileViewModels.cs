@@ -153,8 +153,8 @@ namespace SqlRunner.ViewModel
 
         public void LoadFromDropFile(string content)
         {
-            this.id = 0;
-            this.name = "";
+            this.Id = 0;
+            this.Name = "";
             this.Content = content;
             this.Params.Clear();
 
