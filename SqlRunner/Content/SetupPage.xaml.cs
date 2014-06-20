@@ -6,6 +6,7 @@
 
 using FirstFloor.ModernUI.Windows;
 using SqlRunner.ViewModel;
+using System;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -17,15 +18,22 @@ namespace SqlRunner.Content
 
         public SetupPage()
         {
-            InitializeComponent();
+            InitializeComponent();            
         }
 
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
-            _setting.Password = txtPassword.Password;
+            try
+            {
+                _setting.Password = txtPassword.Password;
 
-            if (_setting.IsValid())
-                _setting.Save();
+                if (_setting.IsValid())
+                    _setting.Save();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "Error");
+            }
         }        
 
         // Load
@@ -40,7 +48,7 @@ namespace SqlRunner.Content
         // Unload
         public void OnNavigatingFrom(FirstFloor.ModernUI.Windows.Navigation.NavigatingCancelEventArgs e)
         {
-            _setting = null;
+            //_setting = null;
         }
 
         public void OnFragmentNavigation(FirstFloor.ModernUI.Windows.Navigation.FragmentNavigationEventArgs e)

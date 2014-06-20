@@ -24,7 +24,7 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>2</ApplicationRevision>
+    <ApplicationRevision>6</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -208,10 +208,10 @@
     <Content Include="Data\SqlRunnerDb.sqlite">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <None Include="Properties\DbSettings.settings">
+    <EmbeddedResource Include="Properties\DbSettings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>DbSettings.Designer.cs</LastGenOutput>
-    </None>
+    </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="SqlRunner_TemporaryKey.pfx" />
   </ItemGroup>
