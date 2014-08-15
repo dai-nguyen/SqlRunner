@@ -34,12 +34,19 @@ namespace SqlRunner.DataAccess
 
         public async Task<List<SearchQueryFile>> LookupAsync(string search, CancellationToken token)
         {
-            string keywords = "";
+            StringBuilder keywords = new StringBuilder();
 
-            if (search.Split(' ').Count(t => !string.IsNullOrEmpty(t) && !string.IsNullOrWhiteSpace(t)) >= 2)
-                keywords = search.Replace(" ", " NEAR ");
-            else
-                keywords = "*" + search + "*";
+            var words = search.Split(' ').Where(t => !string.IsNullOrWhiteSpace(t));
+
+            for (int i = 0; i < words.Count(); i++)
+            {
+                if (words.Count() == 0)
+                    keywords.Append(string.Format("*{0}*", words.ElementAt(i)));
+                else if (i == (words.Count() - 1))                
+                    keywords.Append(words.ElementAt(i));
+                else
+                    keywords.Append(string.Format("{0} NEAR ", words.ElementAt(i)));
+            }
 
             string sql = @"
 select  q.Id, 
