@@ -9,7 +9,7 @@
     <mui:ModernWindow.MenuLinkGroups>
         <mui:LinkGroup DisplayName="welcome">
             <mui:LinkGroup.Links>                
-                <mui:Link DisplayName="home" Source="/Pages/RunPage.xaml" />
+                <mui:Link DisplayName="home" Source="/Pages/RunUserControl.xaml" />
             </mui:LinkGroup.Links>
         </mui:LinkGroup>        
         <mui:LinkGroup DisplayName="settings" GroupName="settings">
