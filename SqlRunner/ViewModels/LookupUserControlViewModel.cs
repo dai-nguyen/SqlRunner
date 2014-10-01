@@ -1,4 +1,5 @@
-﻿using Microsoft.Practices.Prism.Mvvm;
+﻿using Microsoft.Practices.Prism.Commands;
+using Microsoft.Practices.Prism.Mvvm;
 using SqlRunner.DataAccess;
 using SqlRunner.Models;
 using System.Collections.ObjectModel;
@@ -20,14 +21,18 @@ namespace SqlRunner.ViewModels
             set { SetProperty(ref _searchKey, value); }
         }
 
-        public ObservableCollection<SearchQueryFile> Results { get; private set; }        
+        public ObservableCollection<SearchQueryFile> Results { get; private set; }
+
+        public DelegateCommand SearchCommand { get; private set; }
 
         public LookupUserControlViewModel(IAlertMessageService alertService)
         {
             _alertService = alertService;
             _queryFileService = new QueryFileService();
             _tokenSource = new CancellationTokenSource();
-            Results = new ObservableCollection<SearchQueryFile>();            
+            Results = new ObservableCollection<SearchQueryFile>();
+
+            SearchCommand = DelegateCommand.FromAsyncHandler(SearchAsync);
         }
 
         private async Task SearchAsync()

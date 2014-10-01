@@ -20,76 +20,35 @@ namespace SqlRunner.ViewModels
 {
     public class RunUserControlViewModel : BindableBase
     {
-        public ObservableCollection<SqlParamView> Params { get; set; }
+        private readonly QueryFileService _service;
+        private readonly IAlertMessageService _alertService;
+        private QueryFileBindable _queryFile;
 
-        private Int64 id;
-        public Int64 Id
+        public RunUserControlViewModel(IAlertMessageService alertService)
         {
-            get { return id; }
-            set { SetProperty(ref id, value); }            
-        }
-
-        private string name;
-        public string Name
-        {
-            get { return name; }
-            set { SetProperty(ref name, value); }            
-        }
-
-        public bool IsNameEnabled 
-        { 
-            get 
-            { 
-                return Id != 0 ? false : true; 
-            }
-            
-        }
-
-        private string content;
-        public string Content
-        {
-            get { return content; }
-            set { SetProperty(ref content, value); }
-        }
-
-        private DateTime dateCreated;
-        public DateTime DateCreated
-        {
-            get { return dateCreated; }
-            set { SetProperty(ref dateCreated, value); }
-        }
-
-        private DateTime dateModified;
-        public DateTime DateModified
-        {
-            get { return dateModified; }
-            set { SetProperty(ref dateModified, value); }
-        }
-               
-        public DelegateCommand SaveCommand { get; private set; }
-
-        public RunUserControlViewModel()
-        {
-            Id = 0;
+            _service = new QueryFileService();
+            _alertService = alertService;
             Params = new ObservableCollection<SqlParamView>();
-            DateCreated = DateTime.Now;
-            DateModified = DateTime.Now;            
+            SaveCommand = DelegateCommand.FromAsyncHandler(SaveSync, CanSave);
+            DeleteCommand = DelegateCommand.FromAsyncHandler(DeleteAsync, CanDelete);
         }
 
-        public RunUserControlViewModel(QueryFile entity)
+        public QueryFileBindable QueryFile
         {
-            this.Id = entity.Id;
-            this.Name = entity.Name;
-            this.Content = entity.Content;
-            this.Params = JsonConvert.DeserializeObject<ObservableCollection<SqlParamView>>(entity.Params);
+            get { return _queryFile; }
+            private set { SetProperty(ref _queryFile, value); }
         }
+
+        public ObservableCollection<SqlParamView> Params { get; private set; }
+        public DelegateCommand SaveCommand { get; private set; }
+        public DelegateCommand DeleteCommand { get; private set; }
 
         public void LoadFromDropFile(string content)
-        {
-            this.Id = 0;
-            this.Name = "";
-            this.Content = content;
-            this.Params.Clear();
+        {            
+            QueryFile.Id = 0;
+            QueryFile.Name = "";
+            QueryFile.Content = content;
+            Params.Clear();
 
             MatchCollection matches = Regex.Matches(content, @"(?<!\w)@\w+");
 
@@ -100,41 +59,41 @@ namespace SqlRunner.ViewModels
             }
         }
 
-        public async void LoadFromSearchResult(SearchQueryFile result)
-        {
-            using (QueryFileService service = new QueryFileService())
-            {
-                var found = await service.GetAsync(result.Id);
+        //public async void LoadFromSearchResult(SearchQueryFile result)
+        //{
+        //    using (QueryFileService service = new QueryFileService())
+        //    {
+        //        var found = await service.GetAsync(result.Id);
 
-                if (found != null)
-                {
-                    this.Id = found.Id;
-                    this.Name = found.Name;
-                    this.Content = found.Content;
-                    this.Params.Clear();
+        //        if (found != null)
+        //        {
+        //            this.Id = found.Id;
+        //            this.Name = found.Name;
+        //            this.Content = found.Content;
+        //            this.Params.Clear();
 
-                    var prams = JsonConvert.DeserializeObject<ObservableCollection<SqlParamView>>(found.Params);
+        //            var prams = JsonConvert.DeserializeObject<ObservableCollection<SqlParamView>>(found.Params);
 
-                    if (prams != null)
-                    {
-                        foreach (var p in prams)
-                        {
-                            this.Params.Add(p);
-                        }
-                    }
-                }
-            }
-        }
+        //            if (prams != null)
+        //            {
+        //                foreach (var p in prams)
+        //                {
+        //                    this.Params.Add(p);
+        //                }
+        //            }
+        //        }
+        //    }
+        //}
 
-        public async Task<bool> CanSaveAsync()
+        public bool CanSave()
         {
             // New
             if (Id == 0)
             {
                 using (QueryFileService service = new QueryFileService())
                 {
-                    bool exist = await service.All()
-                        .AnyAsync(t => t.Name == this.Name);
+                    bool exist = service.All()
+                        .Any(t => t.Name == this.Name);
 
                     return !exist
                         && !string.IsNullOrEmpty(Name)
@@ -147,48 +106,37 @@ namespace SqlRunner.ViewModels
                 && !string.IsNullOrEmpty(Content);
             }            
         }
-
-        public QueryFile ToEntity()
+         
+        public async Task SaveSync()
         {
-            return new QueryFile
+            try
             {
-                Id = this.id,
-                Name = this.name,
-                Content = this.content,
-                DateCreated = this.dateCreated,
-                DateModified = this.dateModified,
-                Params = JsonConvert.SerializeObject(this.Params)
-            };
-        }        
-
-        public async Task<bool> SaveSync()
-        {
-            using (QueryFileService service = new QueryFileService())
-            {
-                if (this.id == 0)
-                    return await service.CreateAsync(this.ToEntity()) != null ? true : false;
+                if (QueryFile.Id == 0)
+                    await _service.CreateAsync(QueryFile.ToEntity());
                 else
-                    return await service.UpdateAsync(this.ToEntity()) != null ? true : false;
+                    await _service.UpdateAsync(QueryFile.ToEntity());
+            }
+            catch (Exception)
+            {
+
             }
         }
 
-        public async Task<bool> DeleteAsync()
+        public async Task DeleteAsync()
         {
-            if (this.Id != 0)
+            try
             {
-                using (QueryFileService service = new QueryFileService())
-                {
-                    if (await service.DeleteAsync(Id))
-                    {
-                        Id = 0;
-                        Name = "";
-                        Content = "";
-                        Params.Clear();
-                        return true;
-                    }
-                }
+                await _service.DeleteAsync(QueryFile.Id);
             }
-            return false;
+            catch (Exception)
+            {
+
+            }
+        }
+
+        private bool CanDelete()
+        {
+            return QueryFile.Id != 0;
         }
     }
 

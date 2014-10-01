@@ -32,7 +32,7 @@ namespace SqlRunner.DataAccess
                 if (await Context.SaveChangesAsync() > 0)
                     return entity;
             }
-            catch { }
+            catch { throw; }
             return null;
         }
 
@@ -45,7 +45,7 @@ namespace SqlRunner.DataAccess
                 if (await Context.SaveChangesAsync() > 0)
                     return entity;
             }
-            catch { }
+            catch { throw; }
             return null;
         }
 
@@ -56,7 +56,7 @@ namespace SqlRunner.DataAccess
                 Context.Set<T>().Remove(entity);
                 return await Context.SaveChangesAsync() > 0;
             }
-            catch { }
+            catch { throw; }
             return false;
         }
 

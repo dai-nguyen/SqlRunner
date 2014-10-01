@@ -43,7 +43,7 @@ namespace SqlRunner.Pages
             _dialog.Buttons = new Button[] { _dialog.OkButton, _dialog.CancelButton };
             _dialog.Content = new LookupUserControl();
             _dialog.OkButton.Click += LookupOkButton_Click;
-            _dialog.ShowDialog();            
+            _dialog.ShowDialog();
         }
 
         void LookupOkButton_Click(object sender, RoutedEventArgs e)

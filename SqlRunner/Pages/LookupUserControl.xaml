@@ -3,9 +3,12 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:mui="http://firstfloorsoftware.com/ModernUI"
-             mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:prism="http://www.codeplex.com/prism"
+             xmlns:mui="http://firstfloorsoftware.com/ModernUI"        
+             xmlns:views="clr-namespace:SqlRunner.Pages"
+             xmlns:viewModels="clr-namespace:SqlRunner.ViewModels"
+             mc:Ignorable="d" >
     <Grid Style="{StaticResource ContentRoot}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -16,7 +19,13 @@
         <StackPanel Grid.Row="0" Orientation="Horizontal">
             <Label VerticalAlignment="Center">Search</Label>
             <TextBox Name="txtSearch" Width="200" Margin="10,0,0,0" 
-                     TextChanged="txtSearch_TextChanged"/>
+                     Text="{Binding SearchKey, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="SelectionChanged">                        
+                        <i:InvokeCommandAction Command="{Binding SearchCommand}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </TextBox>
         </StackPanel>
 
         <DataGrid Grid.Row="1" Name="gridResults" 
@@ -29,6 +38,15 @@
                 <DataGridTextColumn Header="Date Modified" Binding="{Binding DateModified, StringFormat={}{0:d}}" />
             </DataGrid.Columns>
         </DataGrid>
-        <ProgressBar Grid.Row="2" Name="busyIndicator" Minimum="0" Maximum="1" Height="16" IsIndeterminate="True" Background="Transparent" />
+        <StackPanel Grid.Row="2" HorizontalAlignment="Stretch">
+            <ProgressBar Name="busyIndicator" 
+                         Minimum="0" 
+                         Maximum="1" 
+                         Height="16" 
+                         IsIndeterminate="True" 
+                         Background="Transparent" />
+            <TextBlock Name="txtStatus" />
+        </StackPanel>
+        
     </Grid>
 </UserControl>
